@@ -24,7 +24,7 @@ jobs:
    # This command adds a new server configuration to the JFrog CLI   
    - run: |
        export SERVER_ID="test"
-       jf c add $SERVER_ID --url=$URL --access-token=$ACCESS_TOKEN --interactive=false
+       jf c add $SERVER_ID --url=$JF_URL --access-token=$JF_ACCESS_TOKEN --interactive=false
 
 
    # This action creates a new test file and uploads it to Artifactory   
