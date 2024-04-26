@@ -1,0 +1,35 @@
+name: Push Build to Artifactory
+
+
+on: [push]
+
+
+jobs:
+ build:
+   runs-on: ubuntu-latest
+  
+   steps:
+   # This action checks out the code from the repository
+   - name: Checkout Code
+     uses: actions/checkout@v2
+
+
+   # This action sets up the JFrog CLI with the Artifactory URL and access token     
+   - uses: jfrog/setup-jfrog-cli@v4
+     env:
+       JF_URL: ${{ secrets.ARTIFACTORY_URL }}
+       JF_ACCESS_TOKEN: ${{ secrets.ARTIFACTORY_ACCESS_TOKEN }}
+
+
+   # This command adds a new server configuration to the JFrog CLI   
+   - run: |
+       export SERVER_ID="test"
+       jf c add $SERVER_ID --url=$JF_URL --access-token=$JF_ACCESS_TOKEN --interactive=false
+
+
+   # This action creates a new test file and uploads it to Artifactory   
+   - name: Upload Artifact to Artifactory
+     run: |
+       echo "test file " > test.txt
+       jf rt upload "test.txt" maurice-githubactions-local/
+
